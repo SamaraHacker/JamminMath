@@ -5,7 +5,7 @@ import time
 import webbrowser
 
 
-
+#Puts lock image on jam types and unlocks when they are removed
 def Unlock(lockedIcon):
     threshold = 10
     screen.blit(pygame.transform.scale2x(lockedIcon), (605, 15))
@@ -33,19 +33,13 @@ def Unlock(lockedIcon):
         upgradeBtn6.unlocked = True
         roseConveyor.unlocked = True
        
-        
-
-
+#Handles the math window where the equation outputs
 class mathWindow:
     def __init__(self):
         self.mathWindow = pygame.Rect(0, 0, 600, 600)
         self.window_font = pygame.font.Font(None, 25)
         self.answerSubmitted = True
         self.helpButton = pygame.Rect(490, 30, 100, 50)
-
-        #self.init=basicProblem(mathType, int(level/5))#mathType, difficulty
-        #self.ans = basicProblem.executeProblem(self.init)
-
 
     def windowPopup(self, mathType, level):#doesnt work
         self.answerSubmitted= False
@@ -58,7 +52,7 @@ class mathWindow:
         self.ans = self.ans[1]
         self.refresh()
 
-    def getHelp(self, mathType):#///////NEED TO GIVE THEM URLS
+    def getHelp(self, mathType):#Enters videos
         if mathType == 0:#add
             webbrowser.open("https://www.youtube.com/watch?v=1KxEXKKBndk")
         elif mathType == 1:#sub
@@ -94,11 +88,7 @@ class mathWindow:
         if self.mathType == 3:
             screen.blit(self.secLine, (115, 175))
         
-    
-
-
-
-
+#Handles any button presses and updates Jam values
 class BuyButton:
     def __init__(self, upgradeCost, scoreGiven, yLoc, image, mathType, name):
         self.yLoc = yLoc
@@ -121,7 +111,6 @@ class BuyButton:
 
         self.display_cost=0
 
-        #self.upgradeBtn = pygame.Rect(10, 50, 175, 75)
         self.upgrade_cost = upgradeCost
 
         self.bg = pygame.Rect(600, yLoc, 200, 95)
@@ -156,14 +145,6 @@ class BuyButton:
                     if self.unlocked:
                         if game.money >= self.upgrade_cost*(self.level+1):
                             mathWindowPopup.windowPopup(self.mathType, self.level)
-
-                    
-                    #if self.unlocked:
-                        #if game.money >= self.upgrade_cost*(self.level+1):
-                            #game.mps += self.scoreGiven
-                            #self.mps += self.scoreGiven
-                            #self.level += 1
-                            #game.money-= self.upgrade_cost*self.level
                 
                     self.clicked = False
         
@@ -201,8 +182,7 @@ class BuyButton:
     def render(self):
         self.click_button()
         
-
-
+#Hangles conveyer animations
 class Conveyers:
     def __init__(self, frame1, frame2, x, y):#bool, str, str, int, int
         self.frame1 = frame1
@@ -224,14 +204,10 @@ class Conveyers:
                 else:
                     self.curFrame = self.frame1
             animFrame = pygame.image.load(self.curFrame)
-            screen.blit(animFrame, (self.location))
+            screen.blit(animFrame, (self.location)) 
+       
 
-        
-
-        
-
-        
-
+#Handles images and important vars
 class Game:
     def __init__(self):
         self.mps = 0
@@ -241,11 +217,12 @@ class Game:
         
     
     def increaseMoney(self):
-        
+        #Divided by fps
         self.money+=self.mps/60
 
 
     def updateConveyers(self):
+        #Runs animation based on what jams are unlocked/bought
         if upgradeBtn1.level == 0:
             #print(":C")
             grapeConveyor.anim(False)
@@ -298,15 +275,14 @@ class Game:
 
         self.draw_score()
 
-
-
-
+#Inits variables
 pygame.init()
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
 
 game = Game()
 
+#Inits buttons/jam type interface
 upgradeBtn1 = BuyButton(5, 2, 10, "grape.png", 0, "Grape")
 upgradeBtn2 = BuyButton(70, 7, 110, "Apricot.png", 1, "Apricot")
 upgradeBtn3 = BuyButton(250, 13, 210, "Apple.png", 2, "Apple")
@@ -314,6 +290,7 @@ upgradeBtn4 = BuyButton(700, 22, 310, "Blueberry.png", 3, "Blueberry")
 upgradeBtn5 = BuyButton(2000, 28, 410, "Blackberry.png", 4, "Blackberry")
 upgradeBtn6 = BuyButton(10000, 37, 510, "Rose.png", 5, "Rose")
 
+#Inits conveyer images
 grapeConveyor = Conveyers("AnimationFrames/GrapeConveyer1.png", "AnimationFrames/GrapeConveyer2.png", 340, 60)
 apricotConveyor = Conveyers("AnimationFrames/ApricotConveyer1.png", "AnimationFrames/ApricotConveyer2.png", 340, 140)
 appleConveyor = Conveyers("AnimationFrames/AppleConveyer1.png", "AnimationFrames/AppleConveyer2.png", 340, 220)
@@ -321,37 +298,37 @@ blueberryConveyor = Conveyers("AnimationFrames/BlueberryConveyer1.png", "Animati
 blackberryConveyor = Conveyers("AnimationFrames/BlackberryConveyer1.png", "AnimationFrames/BlackberryConveyer2.png", 340, 440)
 roseConveyor = Conveyers("AnimationFrames/RoseConveyer1.png", "AnimationFrames/RoseConveyer2.png", 340, 520)
 
+#Inits math window popup
 mathWindowPopup=mathWindow()
 
+#Creates display
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("Jammin' Math")
 
-
-
-
+#Inits text font
 text_font = pygame.font.Font(None, 50)
-#title = text_font.render("Jam Game", True, "#000000")
 scoreFont = pygame.font.Font(None, 25)
 
-
+#Inits clock
 clock = pygame.time.Clock()
 
-
-
+#creates the locked images covering locked jams
 lockedIcon = pygame.image.load("lock.png")
+
+#Inits variables for while loop
 run = True
-
-
 needToStallToShowResult = False
 user_text = ''
 
 while run:
 
-    if needToStallToShowResult:
+    if needToStallToShowResult:#Stalls to show incorrect or correct
         time.sleep(2)
         needToStallToShowResult = False
-    if mathWindowPopup.answerSubmitted:
+    if mathWindowPopup.answerSubmitted: #When you're not solving a math problem, following elements renders
         game.render()
+
+        #OnStart should not be function name - runs continuously
         upgradeBtn1.onStart()
         upgradeBtn2.onStart()
         upgradeBtn3.onStart()
@@ -360,7 +337,7 @@ while run:
         upgradeBtn6.onStart()
         
         if not upgradeBtn6.unlocked:
-            Unlock(lockedIcon)#not unlocking icons  //////////////////////////////////
+            Unlock(lockedIcon)
 
         upgradeBtn1.updateUi()
         upgradeBtn2.updateUi()
@@ -370,34 +347,40 @@ while run:
         upgradeBtn6.updateUi()
         
         
-    
+    #Gets cursor position
     cursor = pygame.mouse.get_pos()
 
+    #Checks if an event happens
     for event in pygame.event.get():
-        if event.type == pygame.QUIT:
+        if event.type == pygame.QUIT: #If x is clicked, exits program
             run = False
-        if event.type == pygame.KEYDOWN:#remove now
-            if event.key == pygame.K_BACKSPACE:
+        if event.type == pygame.KEYDOWN: #If a key is pressed
+            if event.key == pygame.K_BACKSPACE: #If backspace is pressed, it deletes the previous character typed
                 user_text = user_text[:-1]
-                #mathWindowPopup.refresh()
-            elif event.key == pygame.K_RETURN:
-                if user_text != '':
-                    if user_text.isnumeric() or user_text[0] == "-":
+            elif event.key == pygame.K_RETURN: #If enter is pressed
+                if user_text != '': #If the input is not blank
+                    if user_text.isnumeric() or user_text[0] == "-": #Checks if the number is numeric or negative
                         mathWindowPopup.answerSubmitted = True
+
                         #figure out which button was pressed
                         buttonList = [upgradeBtn1, upgradeBtn2, upgradeBtn3, upgradeBtn4, upgradeBtn5, upgradeBtn6]
                         buttonList[mathWindowPopup.mathType].onCheckAnswer()
+                    
+                    #Clears text
                     user_text = ""
                     needToStallToShowResult = True
             else:
+                #When key is pressed in mathWindow, key is added to display string
                 if not mathWindowPopup.answerSubmitted:
                     user_text += event.unicode
 
-    if not mathWindowPopup.answerSubmitted:
+    if not mathWindowPopup.answerSubmitted: #If scurrently solving a math problem, show string
         input_label = scoreFont.render("Solution:", True, "#000000")
         mathWindowPopup.refresh()
-    else:
+    else: #Clears
         input_label = scoreFont.render("", True, "#000000")
+    
+    #Displays labels
     screen.blit(input_label, (255,300))
     input_surface = scoreFont.render(user_text, True, "#000000")
     screen.blit(input_surface, (290-len(user_text)*3,350))
@@ -411,10 +394,9 @@ while run:
     upgradeBtn6.render()
 
     
-
+    #Makes it 60 fps
     clock.tick(60)
     game.increaseMoney()
-    #screen.blit(title, (50, 50))
 
     pygame.display.update()
 

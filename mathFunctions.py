@@ -1,6 +1,7 @@
 import random
 import math
 
+#Constants represeting value corresponding to level
 ADD = 0
 SUB = 1
 MULT = 2
@@ -17,6 +18,8 @@ class basicProblem:
     def __init__(self, mathType, level):
         self.mathType = mathType
         self.level = level
+
+    #Returns a tuple of the question(as a string), and the int value of the correct answer
     def executeProblem(self):
         if self.mathType == ADD:
             ans = addition(self.level)
@@ -33,7 +36,6 @@ class basicProblem:
         else:
             ans = root(self.level)
         return ans
-
 
 def addition(level):
     if level == 0:
@@ -115,6 +117,7 @@ def root(level):
     #print(x, " ^ (1/", root, ")")
     return (str(x)+" ^ (1/"+str(root) + ")"), x ** (1/root)
 
+#Future implementation
 def functionCreate(level):#creates the function string for alg, deriv and integrals
     functStr=''
     coeff1 = 0 #First term
@@ -152,6 +155,7 @@ def quadraticFormula(a, b, c):
     else:
         return x2
 
+#future implementation
 def algebra(level):
     answer = 0
     if level == 0:
